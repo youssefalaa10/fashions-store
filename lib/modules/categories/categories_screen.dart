@@ -1,3 +1,4 @@
+import 'package:fashions/modules/categories/products_screen.dart';
 import 'package:fashions/shared/app_color.dart';
 import 'package:flutter/material.dart';
 
@@ -50,6 +51,10 @@ class CategoriesScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(25),
       ),
       child: ListTile(
+        onTap: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const ProductsScreen()));
+        },
         leading: category.leadingIcon,
         title: Text(
           category.title,
