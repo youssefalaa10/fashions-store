@@ -7,9 +7,6 @@ class ProductsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-  
-   
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -51,11 +48,11 @@ class ProductsScreen extends StatelessWidget {
                 ),
                 itemCount: products.length,
                 itemBuilder: (context, index) {
-                  final category = products[index];
+                  final product = products[index];
                   return CategoryCard(
-                    title: category.title,
-                    productCount: category.productCount,
-                    imageUrl: category.imageUrl,
+                    title: product.title,
+                    productCount: product.productCount,
+                    imageUrl: product.imageUrl,
                   );
                 },
               ),
