@@ -1,6 +1,7 @@
 import 'package:fashions/modules/Auth/login_screen/success_screen.dart';
 import 'package:fashions/modules/Auth/signup_screen.dart';
 import 'package:fashions/modules/categories/categories_screen.dart';
+import 'package:fashions/modules/layout_screen.dart';
 import 'package:fashions/shared/app_color.dart';
 import 'package:fashions/shared/app_string.dart';
 import 'package:flutter/material.dart';
@@ -149,13 +150,13 @@ class LoginScreen extends StatelessWidget {
                   const SizedBox(height: 20),
                   ElevatedButton.icon(
                     onPressed: () {
-                       Navigator.push(
-                          context,
-                          MaterialPageRoute<void>(
-                            builder: (BuildContext context) =>
-                                const CategoriesScreen(),
-                          ),
-                        );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute<void>(
+                          builder: (BuildContext context) =>
+                              const LayoutScreen(),
+                        ),
+                      );
                     },
                     icon: const Icon(Icons.facebook, color: Colors.black),
                     label: Text(
