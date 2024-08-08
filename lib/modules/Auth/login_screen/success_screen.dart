@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../layout_screen.dart';
+
 class SuccessScreen extends StatelessWidget {
   const SuccessScreen({super.key});
 
@@ -26,7 +28,9 @@ class SuccessScreen extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 10,),
+              const SizedBox(
+                height: 10,
+              ),
               const Text(
                 'You have successfully registered in our app and start working in it.',
                 textAlign: TextAlign.center,
@@ -39,7 +43,12 @@ class SuccessScreen extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const LayoutScreen()));
+                  },
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16.0),
                     shape: RoundedRectangleBorder(
@@ -52,8 +61,7 @@ class SuccessScreen extends StatelessWidget {
                     style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: Colors.white
-                    ),
+                        color: Colors.white),
                   ),
                 ),
               ),

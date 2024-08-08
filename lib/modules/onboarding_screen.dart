@@ -120,7 +120,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                           context,
                           MaterialPageRoute(
                               builder: (BuildContext context) =>
-                                   LoginScreen()));
+                                   const LandingScreen()));
                     } else {
                       boardController.nextPage(
                         duration: const Duration(

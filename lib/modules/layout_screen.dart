@@ -74,18 +74,15 @@ class _LayoutScreenState extends State<LayoutScreen> {
       screens: _buildScreens(),
       items: _navBarsItems(),
       confineToSafeArea: true,
-      backgroundColor: Colors.white, 
-      handleAndroidBackButtonPress: true, 
-      resizeToAvoidBottomInset:
-          true, 
-      stateManagement: true, 
+      backgroundColor: Colors.white,
+      handleAndroidBackButtonPress: true,
+      resizeToAvoidBottomInset: true,
+      stateManagement: true,
       decoration: NavBarDecoration(
         borderRadius: BorderRadius.circular(10.0),
         colorBehindNavBar: Colors.white,
       ),
-  
-      navBarStyle:
-          NavBarStyle.style7, 
+      navBarStyle: NavBarStyle.style7,
     );
   }
 }

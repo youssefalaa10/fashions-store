@@ -1,10 +1,12 @@
 import 'package:fashions/modules/Auth/login_screen/success_screen.dart';
 import 'package:fashions/modules/Auth/signup_screen.dart';
-import 'package:fashions/modules/categories/categories_screen.dart';
 import 'package:fashions/modules/layout_screen.dart';
 import 'package:fashions/shared/app_color.dart';
 import 'package:fashions/shared/app_string.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+
+import '../../../models/user_model.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
@@ -13,6 +15,26 @@ class LoginScreen extends StatelessWidget {
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+
+  void _login(BuildContext context) async {
+    if (_formKey.currentState!.validate()) {
+      var userBox = Hive.box('userBox');
+      var storedUser = userBox.get('user') as UserModel?;
+
+      if (storedUser != null &&
+          storedUser.email == emailController.text &&
+          storedUser.password == passwordController.text) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const LayoutScreen()),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Invalid email or password')),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,18 +48,19 @@ class LoginScreen extends StatelessWidget {
             Center(
               child: Image.asset(
                 AppString.logo,
-                width: 150.0, // Adjust width as needed
-                height: 150.0, // Adjust height as needed
+                width: 150.0,
+                height: 150.0,
               ),
             ),
             const SizedBox(height: 20.0),
-            const Text(
-              'Welcome!',
-              style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+            Text(
+              AppString.welcome,
+              style:
+                  const TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8.0),
-            const Text(
-              'Please login or sign up to continue our app',
+            Text(
+              AppString.plzLogin,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 20.0),
@@ -47,13 +70,13 @@ class LoginScreen extends StatelessWidget {
                 children: <Widget>[
                   TextFormField(
                     controller: emailController,
-                    decoration: const InputDecoration(
-                      labelText: 'Email',
-                      suffixIcon: Icon(Icons.check),
+                    decoration: InputDecoration(
+                      labelText: AppString.email,
+                      suffixIcon: const Icon(Icons.check),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter your email';
+                        return AppString.plzEnterEmail;
                       }
                       return null;
                     },
@@ -61,14 +84,14 @@ class LoginScreen extends StatelessWidget {
                   const SizedBox(height: 12.0),
                   TextFormField(
                     controller: passwordController,
-                    decoration: const InputDecoration(
-                      labelText: 'Password',
-                      suffixIcon: Icon(Icons.check),
+                    decoration: InputDecoration(
+                      labelText: AppString.password,
+                      suffixIcon: const Icon(Icons.check),
                     ),
                     obscureText: true,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter your password';
+                        return AppString.plzEnterPassword;
                       }
                       return null;
                     },
@@ -77,6 +100,7 @@ class LoginScreen extends StatelessWidget {
                   ElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
+                        _login(context);
                         Navigator.push(
                           context,
                           MaterialPageRoute<void>(
@@ -93,7 +117,7 @@ class LoginScreen extends StatelessWidget {
                           horizontal: 140.0, vertical: 15), // Adjust width here
                     ),
                     child: Text(
-                      'Login', // Button text
+                      AppString.login, // Button text
                       style:
                           TextStyle(fontSize: 18.0, color: AppColor.whiteColor),
                     ),
@@ -107,9 +131,9 @@ class LoginScreen extends StatelessWidget {
                           height: 1,
                         ),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Text("or"),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Text(AppString.or),
                       ),
                       Expanded(
                         child: Divider(
@@ -131,9 +155,9 @@ class LoginScreen extends StatelessWidget {
                       );
                     },
                     icon: const Icon(Icons.facebook, color: Colors.white),
-                    label: const Text(
-                      'Continue with Facebook',
-                      style: TextStyle(fontSize: 18, color: Colors.white),
+                    label: Text(
+                      AppString.continueWithFacebook,
+                      style: const TextStyle(fontSize: 18, color: Colors.white),
                     ),
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size(320, 50),
@@ -160,7 +184,7 @@ class LoginScreen extends StatelessWidget {
                     },
                     icon: const Icon(Icons.facebook, color: Colors.black),
                     label: Text(
-                      'Continue with Google',
+                      AppString.continueWithGoogle,
                       style: TextStyle(fontSize: 18, color: AppColor.greyColor),
                     ),
                     style: ElevatedButton.styleFrom(
@@ -181,7 +205,7 @@ class LoginScreen extends StatelessWidget {
                     onPressed: () {},
                     icon: const Icon(Icons.apple, color: Colors.black),
                     label: Text(
-                      'Continue with Apple',
+                      AppString.continueWithApple,
                       style: TextStyle(fontSize: 18, color: AppColor.greyColor),
                     ),
                     style: ElevatedButton.styleFrom(

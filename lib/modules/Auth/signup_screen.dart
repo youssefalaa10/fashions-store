@@ -2,6 +2,9 @@ import 'package:fashions/modules/Auth/login_screen/success_screen.dart';
 import 'package:fashions/shared/app_color.dart';
 import 'package:fashions/shared/app_string.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+
+import '../../models/user_model.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -20,6 +23,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool checkValue = false;
   bool _passwordVisible = false;
   bool _confirmPasswordVisible = false;
+
+  void _signUp() async {
+    if (_formKey.currentState!.validate() && checkValue) {
+      var userBox = Hive.box('userBox');
+      var newUser = UserModel(
+        userName: userTextformFieldController.text,
+        email: emailTextformFieldController.text,
+        password: passwordTextformFieldController.text,
+      );
+      await userBox.put('user', newUser);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const SuccessScreen()),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -188,6 +207,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate() && checkValue) {
+                        _signUp;
                         Navigator.push(
                           context,
                           MaterialPageRoute<void>(
