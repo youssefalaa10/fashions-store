@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
 import '../shared/app_color.dart';
+import 'Home/home_screen.dart';
 import 'categories/categories_screen.dart';
 
 class LayoutScreen extends StatefulWidget {
@@ -22,8 +23,8 @@ class _LayoutScreenState extends State<LayoutScreen> {
 
   List<Widget> _buildScreens() {
     return [
+      const HomeScreen(),
       const CategoriesScreen(),
-      const Scaffold(body: Center(child: Text('Screen 2'))),
       const Scaffold(body: Center(child: Text('Screen 3'))),
       const Scaffold(body: Center(child: Text('Screen 4'))),
     ];
