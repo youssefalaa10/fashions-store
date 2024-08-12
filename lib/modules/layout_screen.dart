@@ -1,3 +1,4 @@
+import 'package:fashions/modules/settings/edit_profile_screen.dart';
 import 'package:fashions/modules/settings/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
@@ -26,6 +27,7 @@ class _LayoutScreenState extends State<LayoutScreen> {
     return [
       const HomeScreen(),
       const CategoriesScreen(),
+      // const EditProfileScreen(),
       const Scaffold(body: Center(child: Text('Notification Screen'))),
       const ProfileScreen(),
     ];

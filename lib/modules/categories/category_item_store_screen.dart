@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../models/category_item_store_model.dart';
-import '../widgets/product_card_item.dart';
+import 'widgets/product_card_item.dart';
 
 class CategoryItemStore extends StatelessWidget {
   const CategoryItemStore({super.key});

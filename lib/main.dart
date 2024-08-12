@@ -1,4 +1,4 @@
-import 'package:fashions/modules/splash_screen.dart';
+import 'package:fashions/modules/Landing/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 

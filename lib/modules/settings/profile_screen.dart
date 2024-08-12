@@ -1,3 +1,5 @@
+import 'package:fashions/modules/settings/edit_profile_screen.dart';
+import 'package:fashions/modules/settings/widgets/buildOptionIcon.dart';
 import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -32,7 +34,7 @@ class ProfileScreen extends StatelessWidget {
             children: [
               _buildProfileHeader(context),
               const SizedBox(height: 25.0),
-              _buildOptionsList(),
+              _buildOptionsList(context),
             ],
           ),
         ),
@@ -68,7 +70,7 @@ class ProfileScreen extends StatelessWidget {
                 repeat: ImageRepeat.noRepeat,
               ),
               shape: BoxShape.rectangle,
-              borderRadius: BorderRadius.circular(9), 
+              borderRadius: BorderRadius.circular(9),
             ),
           ),
           const SizedBox(width: 16.0),
@@ -93,7 +95,7 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildOptionsList() {
+  Widget _buildOptionsList(context) {
     return Container(
       padding: const EdgeInsets.all(6.0),
       decoration: BoxDecoration(
@@ -105,18 +107,23 @@ class ProfileScreen extends StatelessWidget {
       child: Column(
         children: [
           ListTile(
-            leading: _buildOptionIcon(Icons.person),
+            leading: const BuildOptionIcon(icon: Icons.person),
             title: const Text('Profile Details'),
             trailing: const Icon(
               Icons.arrow_forward_ios,
               size: 18,
             ),
             onTap: () {
-              // Handle
+              Navigator.push(
+                context,
+                MaterialPageRoute<void>(
+                  builder: (BuildContext context) => const EditProfileScreen(),
+                ),
+              );
             },
           ),
           ListTile(
-            leading: _buildOptionIcon(Icons.shopping_bag),
+            leading: const BuildOptionIcon(icon: Icons.shopping_bag),
             title: const Text('My Order'),
             trailing: const Icon(
               Icons.arrow_forward_ios,
@@ -127,7 +134,7 @@ class ProfileScreen extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: _buildOptionIcon(Icons.favorite),
+            leading: const BuildOptionIcon(icon: Icons.favorite),
             title: const Text('My Favourites'),
             trailing: const Icon(
               Icons.arrow_forward_ios,
@@ -138,7 +145,7 @@ class ProfileScreen extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: _buildOptionIcon(Icons.settings),
+            leading: const BuildOptionIcon(icon: Icons.settings),
             title: const Text('Settings'),
             trailing: const Icon(
               Icons.arrow_forward_ios,
@@ -149,22 +156,6 @@ class ProfileScreen extends StatelessWidget {
             },
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildOptionIcon(IconData icon) {
-    return Container(
-      padding: const EdgeInsets.all(8.0),
-      decoration: BoxDecoration(
-        color: Colors.grey[200],
-        shape: BoxShape.rectangle,
-        borderRadius: BorderRadius.circular(8.0),
-      ),
-      child: Icon(
-        icon,
-        size: 25,
-        color: Colors.grey[800],
       ),
     );
   }

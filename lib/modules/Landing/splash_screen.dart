@@ -1,4 +1,4 @@
-import 'package:fashions/modules/onboarding_screen.dart';
+import 'package:fashions/modules/Landing/onboarding_screen.dart';
 import 'package:fashions/shared/app_string.dart';
 import 'package:flutter/material.dart';
 

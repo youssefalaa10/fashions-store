@@ -3,7 +3,7 @@ import 'package:fashions/modules/Auth/signup_screen.dart';
 import 'package:fashions/shared/app_string.dart';
 import 'package:flutter/material.dart';
 
-import '../shared/app_color.dart';
+import '../../shared/app_color.dart';
 
 class LandingScreen extends StatelessWidget {
   const LandingScreen({super.key});

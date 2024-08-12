@@ -1,7 +1,7 @@
 import 'package:fashions/shared/app_color.dart';
 import 'package:flutter/material.dart';
 
-import '../categories/category_item_store_screen.dart';
+import '../category_item_store_screen.dart';
 
 class CategoryCard extends StatelessWidget {
   final String title;

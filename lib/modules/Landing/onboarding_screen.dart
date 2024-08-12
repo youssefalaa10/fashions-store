@@ -1,4 +1,4 @@
-import 'package:fashions/modules/landing_screen.dart';
+import 'package:fashions/modules/Landing/landing_screen.dart';
 import 'package:fashions/shared/app_color.dart';
 import 'package:fashions/shared/app_string.dart';
 import 'package:flutter/material.dart';
