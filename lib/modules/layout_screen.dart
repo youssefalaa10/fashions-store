@@ -1,8 +1,7 @@
-import 'package:fashions/modules/settings/edit_profile_screen.dart';
+import 'package:fashions/modules/Home/product_details.dart';
 import 'package:fashions/modules/settings/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
-
 import '../shared/app_color.dart';
 import 'Home/home_screen.dart';
 import 'categories/categories_screen.dart';
@@ -28,7 +27,8 @@ class _LayoutScreenState extends State<LayoutScreen> {
       const HomeScreen(),
       const CategoriesScreen(),
       // const EditProfileScreen(),
-      const Scaffold(body: Center(child: Text('Notification Screen'))),
+      const ProductDetailScreen(),
+      // const Scaffold(body: Center(child: Text('Notification Screen'))),
       const ProfileScreen(),
     ];
   }
