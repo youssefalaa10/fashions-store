@@ -1,92 +1,98 @@
-import 'package:fashions/modules/Auth/login_screen/success_screen.dart';
-import 'package:fashions/shared/app_color.dart';
-import 'package:fashions/shared/app_string.dart';
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../shared/app_color.dart';
+import 'cubit/auth_bloc.dart';
+import 'login_screen/success_screen.dart';
 
-import '../../models/user_model.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
 
   @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
+  _SignUpScreenState createState() => _SignUpScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
+class _SignUpScreenState extends State<SignUpScreen>
+    with SingleTickerProviderStateMixin {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final userTextformFieldController = TextEditingController();
   final emailTextformFieldController = TextEditingController();
   final passwordTextformFieldController = TextEditingController();
   final confirmPasswordTextformFieldController = TextEditingController();
 
+  late TabController _tabController;
   bool checkValue = false;
   bool _passwordVisible = false;
   bool _confirmPasswordVisible = false;
 
-  void _signUp() async {
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    userTextformFieldController.dispose();
+    emailTextformFieldController.dispose();
+    passwordTextformFieldController.dispose();
+    confirmPasswordTextformFieldController.dispose();
+    super.dispose();
+  }
+
+  void _signUp() {
     if (_formKey.currentState!.validate() && checkValue) {
-      var userBox = Hive.box('userBox');
-      var newUser = UserModel(
-        userName: userTextformFieldController.text,
-        email: emailTextformFieldController.text,
-        password: passwordTextformFieldController.text,
-      );
-      await userBox.put('user', newUser);
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const SuccessScreen()),
-      );
+      final isAdmin = _tabController.index == 1;
+      context.read<AuthBloc>().add(SignUpRequested(
+            email: emailTextformFieldController.text,
+            password: passwordTextformFieldController.text,
+            isAdmin: isAdmin,
+          ));
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Center(
-              child: Image.asset(
-                AppString.logo,
-                width: 150.0,
-                height: 150.0,
-              ),
-            ),
-            const SizedBox(height: 20.0),
-            const Text(
-              'Sign Up',
-              style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 8.0),
-            const Text(
-              'Create a new account',
-            ),
-            const SizedBox(height: 20.0),
-            Form(
+      appBar: AppBar(
+        title: const Text('Sign Up'),
+        bottom: TabBar(
+          controller: _tabController,
+          tabs: const [
+            Tab(text: 'User'),
+            Tab(text: 'Admin'),
+          ],
+        ),
+      ),
+      body: BlocConsumer<AuthBloc, AuthState>(
+        listener: (context, state) {
+          if (state is AuthSuccess) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const SuccessScreen()),
+            );
+          } else if (state is AuthFailure) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.error)),
+            );
+          }
+        },
+        builder: (context, state) {
+          if (state is AuthLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(20.0),
+            child: Form(
               key: _formKey,
               child: Column(
                 children: <Widget>[
+                  const SizedBox(height: 20.0),
                   TextFormField(
                     controller: userTextformFieldController,
-                    decoration: InputDecoration(
-                      labelText: 'User Name',
-                      suffixIcon: Container(
-                        decoration: BoxDecoration(
-                          color: AppColor.blackColor,
-                          borderRadius: BorderRadius.circular(25),
-                        ),
-                        padding: const EdgeInsets.all(6),
-                        child: Icon(
-                          Icons.check,
-                          color: AppColor.whiteColor,
-                          size: 16,
-                        ),
-                      ),
-                    ),
+                    decoration: const InputDecoration(labelText: 'User Name'),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your user name';
@@ -97,9 +103,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   const SizedBox(height: 12.0),
                   TextFormField(
                     controller: emailTextformFieldController,
-                    decoration: const InputDecoration(
-                      labelText: 'Email',
-                    ),
+                    decoration: const InputDecoration(labelText: 'Email'),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your email';
@@ -112,26 +116,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     controller: passwordTextformFieldController,
                     decoration: InputDecoration(
                       labelText: 'Password',
-                      suffixIcon: InkWell(
-                        onTap: () {
+                      suffixIcon: IconButton(
+                        icon: Icon(_passwordVisible
+                            ? Icons.visibility
+                            : Icons.visibility_off),
+                        onPressed: () {
                           setState(() {
                             _passwordVisible = !_passwordVisible;
                           });
                         },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: AppColor.blackColor,
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                          padding: const EdgeInsets.all(6),
-                          child: Icon(
-                            _passwordVisible
-                                ? Icons.visibility
-                                : Icons.visibility_off,
-                            color: AppColor.whiteColor,
-                            size: 16,
-                          ),
-                        ),
                       ),
                     ),
                     obscureText: !_passwordVisible,
@@ -147,26 +140,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     controller: confirmPasswordTextformFieldController,
                     decoration: InputDecoration(
                       labelText: 'Confirm Password',
-                      suffixIcon: InkWell(
-                        onTap: () {
+                      suffixIcon: IconButton(
+                        icon: Icon(_confirmPasswordVisible
+                            ? Icons.visibility
+                            : Icons.visibility_off),
+                        onPressed: () {
                           setState(() {
                             _confirmPasswordVisible = !_confirmPasswordVisible;
                           });
                         },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: AppColor.blackColor,
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                          padding: const EdgeInsets.all(6),
-                          child: Icon(
-                            _confirmPasswordVisible
-                                ? Icons.visibility
-                                : Icons.visibility_off,
-                            color: AppColor.whiteColor,
-                            size: 16,
-                          ),
-                        ),
                       ),
                     ),
                     obscureText: !_confirmPasswordVisible,
@@ -194,47 +176,30 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       const SizedBox(width: 15.0),
                       Expanded(
                         child: Text(
-                          "By creating an account you have to agree with our terms & conditions",
-                          style: TextStyle(
-                            color: AppColor.greyColor,
-                          ),
-                          maxLines: 2,
+                          "By creating an account you agree to our terms & conditions",
+                          style: TextStyle(color: AppColor.greyColor),
                         ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 20.0),
                   ElevatedButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate() && checkValue) {
-                        _signUp;
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute<void>(
-                            builder: (BuildContext context) =>
-                                const SuccessScreen(),
-                          ),
-                        );
-                      }
-                    },
+                    onPressed: _signUp,
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size(320, 50),
                       backgroundColor: AppColor.blackColor,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 140.0, vertical: 15),
                     ),
                     child: Text(
                       'Sign Up',
-                      style:
-                          TextStyle(fontSize: 18.0, color: AppColor.whiteColor),
+                      style: TextStyle(
+                          fontSize: 18.0, color: AppColor.whiteColor),
                     ),
                   ),
-                  const SizedBox(height: 20.0),
                 ],
               ),
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

@@ -8,7 +8,7 @@ class ProductDetailScreen extends StatefulWidget {
 }
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
-  int _selectedSizeIndex = 2; // Default selected size index
+  int _selectedSizeIndex = 2; 
   int _quantity = 1;
 
   void _onSizeSelected(int index) {
